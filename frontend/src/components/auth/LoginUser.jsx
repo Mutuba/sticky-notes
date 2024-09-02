@@ -12,25 +12,30 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
-import { loginUser } from "./auth";
 import { AuthContext } from "../../context/AuthContext";
+
 const LoginUser = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const { setUser } = useContext(AuthContext);
+  const [loading, setLoading] = useState(false);
+  const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    try {
-      console.log("Attempting to log in with:", email, password);
+    setError("");
+    setLoading(true);
 
-      const session = await loginUser(email, password);
-      setUser(session);
-      setTimeout(() => navigate("/"), 2000);
-    } catch (error) {
-      setError("Login failed. Please check your credentials.");
+    const response = await login(email, password);
+
+    setLoading(false);
+
+    if (response.success) {
+      console.log("Things went pretty well");
+      navigate("/");
+    } else {
+      setError(response.message);
     }
   };
 
@@ -48,7 +53,7 @@ const LoginUser = () => {
             id="email"
             type="email"
             label="Email Address"
-            name={email}
+            value={email}
             onChange={(e) => setEmail(e.target.value)}
             autoFocus
           />
@@ -56,9 +61,10 @@ const LoginUser = () => {
             margin="normal"
             required
             fullWidth
-            name={password}
+            name="password"
             label="Password"
             type="password"
+            value={password}
             onChange={(e) => setPassword(e.target.value)}
             id="password"
           />
@@ -73,8 +79,9 @@ const LoginUser = () => {
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
+            disabled={loading}
           >
-            Sign In
+            {loading ? "Signing In..." : "Sign In"}
           </Button>
           <Grid>
             <Link href="">Forgot password?</Link>

@@ -1,6 +1,9 @@
 import { createContext, useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { db } from "../appwrite/databases";
+// import { db } from "../appwrite/databases";
+import { listNotes } from "../services/notes_service";
+// import * as noteService from "../services/noteService";
+
 import Spinner from "../icons/Spinner";
 
 const NotesContext = createContext();
@@ -15,7 +18,7 @@ const NotesProvider = ({ children }) => {
   }, []);
 
   const fetchNotes = async () => {
-    const response = await db.notes.list();
+    const response = await listNotes();
     setNotes(response.documents);
     setLoading(false);
   };

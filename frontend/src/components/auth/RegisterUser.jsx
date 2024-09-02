@@ -9,28 +9,30 @@ import {
   Link,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { registerUser } from "./auth";
 import { AuthContext } from "../../context/AuthContext";
 
 const RegisterUser = () => {
-  const { setUser } = useContext(AuthContext);
+  const { register } = useContext(AuthContext);
   const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    try {
-      const session = await registerUser(email, password);
-      setUser(session);
+    setError("");
+    setLoading(true);
+    const response = await register(username, email, password);
+    setLoading(false);
+    if (response.success) {
       setSuccess("Registration successful. Please log in.");
-      setError("");
       setTimeout(() => navigate("/"), 2000);
-    } catch (error) {
-      setError(error.message);
+    } else {
       setSuccess("");
+      setError(response.message);
     }
   };
 
@@ -41,6 +43,17 @@ const RegisterUser = () => {
           Sign Up
         </Typography>
         <Box component="form" onSubmit={handleSubmit}>
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="username"
+            type="username"
+            label="Username"
+            onChange={(e) => setUsername(e.target.value)}
+            autoFocus
+          />
+
           <TextField
             margin="normal"
             required
@@ -68,8 +81,9 @@ const RegisterUser = () => {
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
+            disabled={loading}
           >
-            Sign Up
+            {loading ? "Signing Up..." : "Sign Up"}
           </Button>
           <Grid>
             <Link href="/login">Already have an account? Sign In</Link>
