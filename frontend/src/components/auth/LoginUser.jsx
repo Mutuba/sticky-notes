@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import {
   Box,
   Button,
@@ -11,7 +11,6 @@ import {
   TextField,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-
 import { AuthContext } from "../../context/AuthContext";
 
 const LoginUser = () => {
@@ -19,20 +18,23 @@ const LoginUser = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const { login } = useContext(AuthContext);
+  const { login, user } = useContext(AuthContext);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, [user, navigate]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setError("");
     setLoading(true);
-
     const response = await login(email, password);
-
     setLoading(false);
 
     if (response.success) {
-      console.log("Things went pretty well");
       navigate("/");
     } else {
       setError(response.message);

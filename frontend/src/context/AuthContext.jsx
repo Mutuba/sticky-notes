@@ -1,18 +1,24 @@
 import { createContext, useState, useEffect } from "react";
 import PropTypes from "prop-types";
+import Spinner from "../icons/Spinner";
 
-const API_BASE_URL = "http://127.0.0.1:5000/api";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [userToken, setUserToken] = useState(null);
+
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const checkSession = async () => {
       const token = localStorage.getItem("token");
+
       if (!token) {
         setUser(null);
+        setLoading(false);
         return;
       }
 
@@ -27,13 +33,17 @@ const AuthProvider = ({ children }) => {
         if (!response.ok) {
           localStorage.removeItem("token");
           setUser(null);
+          setLoading(false);
           return;
         }
 
         const data = await response.json();
+        setUserToken(token);
         setUser(data.user);
       } catch (error) {
         setUser(null);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -56,6 +66,7 @@ const AuthProvider = ({ children }) => {
 
       const data = await response.json();
       localStorage.setItem("token", data.token);
+      setUserToken(data.token);
       setUser(data.user);
       return { success: true, user: data.user };
     } catch (error) {
@@ -80,6 +91,7 @@ const AuthProvider = ({ children }) => {
 
       const data = await response.json();
       localStorage.setItem("token", data.token);
+      setUserToken(data.token);
       setUser(data.user);
       return { success: true, user: data.user };
     } catch (error) {
@@ -90,11 +102,27 @@ const AuthProvider = ({ children }) => {
   const logout = () => {
     localStorage.removeItem("token");
     setUser(null);
+    setUserToken(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, register, logout }}>
-      {children}
+    <AuthContext.Provider
+      value={{ user, userToken, loading, login, register, logout }}
+    >
+      {loading ? (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            height: "100vh",
+          }}
+        >
+          <Spinner size="100" />
+        </div>
+      ) : (
+        children
+      )}
     </AuthContext.Provider>
   );
 };

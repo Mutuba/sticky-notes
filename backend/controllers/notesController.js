@@ -25,15 +25,20 @@ const getNotes = async (req, res) => {
 };
 
 const updateNote = async (req, res) => {
-  const { body, colors, position } = req.body;
+  const updates = req.body;
+
   try {
-    const note = await StickyNote.findById(req.params.id);
+    const note = await StickyNote.findByIdAndUpdate(
+      req.params.id,
+      { $set: updates },
+      { new: true }
+    );
+
     if (!note || note.user.toString() !== req.user.id) {
       return res.status(404).json({ message: "Note not found" });
     }
-    note.body = body;
-    note.colors = colors;
-    note.position = position;
+
+    Object.assign(note, updates);
     await note.save();
     res.json(note);
   } catch (error) {

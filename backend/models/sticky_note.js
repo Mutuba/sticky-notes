@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const StickyNoteSchema = new mongoose.Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-  body: { type: String, required: true },
+  body: { type: String, default: "" },
   colors: {
     id: { type: String, default: "color-blue" },
     colorHeader: { type: String, default: "#9BD1DE" },

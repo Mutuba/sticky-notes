@@ -3,21 +3,23 @@ import PropTypes from "prop-types";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import DeleteButton from "./DeleteButton";
-import { setNewOffset, autoGrow, setZIndex, bodyParser } from "../utils";
-import { db } from "../appwrite/databases";
+import { setNewOffset, autoGrow, setZIndex } from "../utils";
 import Spinner from "../icons/Spinner";
 import { NotesContext } from "../context/NotesContext";
+import { AuthContext } from "../context/AuthContext";
+import { updateNote } from "../services/notes_service";
 
 const NoteCard = ({ note }) => {
   const [saving, setSaving] = useState(false);
-  const [position, setPosition] = useState(JSON.parse(note.position));
-  const colors = JSON.parse(note.colors);
-  const body = bodyParser(note.body);
+  const [position, setPosition] = useState(note.position);
+  const colors = note.colors;
+  const body = note.body;
   const textAreaRef = useRef(null);
   let mouseStartPos = { x: 0, y: 0 };
   const cardRef = useRef(null);
   const keyUpTimer = useRef(null);
   const { setSelectedNote } = useContext(NotesContext);
+  const { userToken } = useContext(AuthContext);
 
   const handleKeyUp = async () => {
     setSaving(true);
@@ -49,17 +51,16 @@ const NoteCard = ({ note }) => {
   };
 
   const saveData = async (key, value) => {
-    const payload = { [key]: JSON.stringify(value) };
-    try {
-      await db.notes.update(note.$id, payload);
-    } catch (error) {
+    const payload = { [key]: value };
+    const response = updateNote(note._id, payload, userToken);
+    setSaving(false);
+    if (!response.success) {
       const toastId = "save-note-error";
       toast.dismiss(toastId);
-      toast.error("An error occured while saving note", {
+      toast.error(response.error, {
         toastId,
       });
     }
-    setSaving(false);
   };
 
   const mouseUp = () => {
@@ -98,7 +99,7 @@ const NoteCard = ({ note }) => {
         onMouseDown={mouseDown}
         style={{ backgroundColor: colors.colorHeader }}
       >
-        <DeleteButton noteId={note.$id} />
+        <DeleteButton noteId={note._id} />
 
         {saving && (
           <div className="card-saving">
@@ -131,10 +132,18 @@ const NoteCard = ({ note }) => {
 NoteCard.propTypes = {
   setNotes: PropTypes.func,
   note: PropTypes.shape({
-    $id: PropTypes.string,
+    _id: PropTypes.string,
     body: PropTypes.string,
-    position: PropTypes.string,
-    colors: PropTypes.string,
+    position: PropTypes.shape({
+      x: PropTypes.number,
+      y: PropTypes.number,
+    }),
+    colors: PropTypes.shape({
+      id: PropTypes.string,
+      colorHeader: PropTypes.string,
+      colorText: PropTypes.string,
+      colorBody: PropTypes.string,
+    }),
   }),
 };
 

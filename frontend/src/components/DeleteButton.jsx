@@ -1,14 +1,31 @@
 import { useContext } from "react";
 import PropTypes from "prop-types";
 import Trash from "../icons/Trash";
-import { db } from "../appwrite/databases";
+import { deleteNote } from "../services/notes_service";
 import { NotesContext } from "../context/NotesContext";
+import { AuthContext } from "../context/AuthContext";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const DeleteButton = ({ noteId }) => {
   const { setNotes } = useContext(NotesContext);
+  const { userToken } = useContext(AuthContext);
+
   const handleDelete = async () => {
-    db.notes.delete(noteId);
-    setNotes((prevState) => prevState.filter((note) => note.$id !== noteId));
+    try {
+      const response = await deleteNote(noteId, userToken);
+      if (response.success) {
+        setNotes((prevState) =>
+          prevState.filter((note) => note._id !== noteId)
+        );
+      } else {
+        throw new Error(response.error);
+      }
+    } catch (error) {
+      const toastId = "delete-note-error-toast";
+      toast.dismiss(toastId);
+      toast.error(error, { toastId });
+    }
   };
 
   return (
@@ -19,7 +36,7 @@ const DeleteButton = ({ noteId }) => {
 };
 
 DeleteButton.propTypes = {
-  noteId: PropTypes.string,
+  noteId: PropTypes.string.isRequired,
 };
 
 export default DeleteButton;
