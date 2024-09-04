@@ -34,7 +34,6 @@ const NotesProvider = ({ children }) => {
     fetchNotes();
   }, [fetchNotes]);
 
-  console.log("In the notes context", notes);
   return (
     <NotesContext.Provider
       value={{ notes, setNotes, selectedNote, setSelectedNote, error }}
