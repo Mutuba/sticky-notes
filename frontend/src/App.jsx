@@ -5,6 +5,7 @@ import { NotesProvider } from "./context/NotesContext";
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
 import { AuthProvider } from "./context/AuthContext";
+import Navbar from "./components/NavBar";
 
 const App = () => {
   return (
@@ -23,6 +24,8 @@ const App = () => {
               draggable
               pauseOnHover
             />
+            <Navbar />
+
             <Routes>
               <Route path="/register" element={<Register />} />
               <Route path="/login" element={<Login />} />
