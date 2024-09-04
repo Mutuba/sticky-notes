@@ -52,14 +52,22 @@ const NoteCard = ({ note }) => {
 
   const saveData = async (key, value) => {
     const payload = { [key]: value };
-    const response = updateNote(note._id, payload, userToken);
-    setSaving(false);
-    if (!response.success) {
+    setSaving(true);
+
+    try {
+      const response = await updateNote(note._id, payload, userToken);
+
+      if (!response.success) {
+        throw new Error(response.error);
+      }
+    } catch (error) {
       const toastId = "save-note-error";
       toast.dismiss(toastId);
-      toast.error(response.error, {
+      toast.error(error.message, {
         toastId,
       });
+    } finally {
+      setSaving(false);
     }
   };
 

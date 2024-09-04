@@ -33,7 +33,7 @@ const AddButton = () => {
     } catch (error) {
       const toastId = "create-note-error-toast";
       toast.dismiss(toastId);
-      toast.error(error, { toastId });
+      toast.error(error.message, { toastId });
     }
   };
 

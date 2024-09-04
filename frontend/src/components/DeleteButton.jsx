@@ -24,7 +24,7 @@ const DeleteButton = ({ noteId }) => {
     } catch (error) {
       const toastId = "delete-note-error-toast";
       toast.dismiss(toastId);
-      toast.error(error, { toastId });
+      toast.error(error.message, { toastId });
     }
   };
 

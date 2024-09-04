@@ -46,7 +46,7 @@ const Color = ({ color }) => {
       setNotes(notes);
       const toastId = "color-error-toast";
       toast.dismiss(toastId);
-      toast.error(error, {
+      toast.error(error.message, {
         toastId,
       });
     }

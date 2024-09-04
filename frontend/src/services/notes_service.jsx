@@ -18,7 +18,7 @@ export const createNote = async (noteData, token) => {
     const data = await response.json();
     return { success: true, data: data };
   } catch (error) {
-    return { success: false, error: error };
+    return { success: false, error: error.message };
   }
 };
 
@@ -40,7 +40,7 @@ export const updateNote = async (noteId, noteData, token) => {
     const data = await response.json();
     return { success: true, data: data };
   } catch (error) {
-    return { success: false, error: error };
+    return { success: false, error: error.message };
   }
 };
 
@@ -60,7 +60,7 @@ export const deleteNote = async (noteId, token) => {
     const data = await response.json();
     return { success: true, data: data };
   } catch (error) {
-    return { success: false, error: error };
+    return { success: false, error: error.message };
   }
 };
 
@@ -80,7 +80,7 @@ export const getNote = async (noteId, token) => {
     const data = await response.json();
     return { success: true, data: data };
   } catch (error) {
-    return { success: false, error: error };
+    return { success: false, error: error.message };
   }
 };
 
@@ -101,6 +101,6 @@ export const listNotes = async (queries, token) => {
     const data = await response.json();
     return { success: true, data: data };
   } catch (error) {
-    return { success: false, error: error };
+    return { success: false, error: error.message };
   }
 };
