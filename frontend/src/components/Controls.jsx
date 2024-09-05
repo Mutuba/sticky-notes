@@ -4,7 +4,7 @@ import colors from "../assets/colors.json";
 
 const Controls = () => {
   return (
-    <div id="controls">
+    <div id="controls" data-testid="controls">
       <AddButton />
       {colors.map((color) => (
         <Color key={color.id} color={color} />

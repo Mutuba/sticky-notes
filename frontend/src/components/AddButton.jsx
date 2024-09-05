@@ -38,7 +38,7 @@ const AddButton = () => {
   };
 
   return (
-    <div id="add-btn" onClick={addNote}>
+    <div id="add-btn" data-testid="add-button" onClick={addNote}>
       <Plus />
     </div>
   );
