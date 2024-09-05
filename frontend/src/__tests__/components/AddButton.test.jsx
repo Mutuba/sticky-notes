@@ -6,10 +6,9 @@ import { AuthContext } from "../../context/AuthContext";
 import AddButton from "../../components/AddButton";
 
 const setNotes = vi.fn();
-const token = "random-token";
-
+const userToken = "random-token";
 const mockNotesContext = { setNotes };
-const mockAuthContext = { token };
+const mockAuthContext = { userToken };
 
 const renderWithContext = (component) => {
   return render(
