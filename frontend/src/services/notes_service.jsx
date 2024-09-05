@@ -64,30 +64,9 @@ export const deleteNote = async (noteId, token) => {
   }
 };
 
-export const getNote = async (noteId, token) => {
+export const listNotes = async (token) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/notes/${noteId}`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error("Failed to fetch note");
-    }
-
-    const data = await response.json();
-    return { success: true, data: data };
-  } catch (error) {
-    return { success: false, error: error.message };
-  }
-};
-
-export const listNotes = async (queries, token) => {
-  try {
-    const queryString = new URLSearchParams(queries).toString();
-    const response = await fetch(`${API_BASE_URL}/notes?${queryString}`, {
+    const response = await fetch(`${API_BASE_URL}/notes`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
