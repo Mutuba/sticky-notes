@@ -29,7 +29,7 @@ const DeleteButton = ({ noteId }) => {
   };
 
   return (
-    <div onClick={handleDelete}>
+    <div data-testid="delete-button" onClick={handleDelete}>
       <Trash />
     </div>
   );
