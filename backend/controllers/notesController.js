@@ -49,10 +49,13 @@ const updateNote = async (req, res) => {
 const deleteNote = async (req, res) => {
   try {
     const note = await StickyNote.findById(req.params.id);
+
     if (!note || note.user.toString() !== req.user.id) {
       return res.status(404).json({ message: "Note not found" });
     }
-    await note.remove();
+
+    await StickyNote.findByIdAndDelete(req.params.id);
+
     res.json({ message: "Note removed" });
   } catch (error) {
     res.status(500).json({ message: "Server error" });
