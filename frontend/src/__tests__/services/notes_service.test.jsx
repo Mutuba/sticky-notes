@@ -58,9 +58,10 @@ describe("Notes Service", () => {
 
   test("deleteNote should delete a note", async () => {
     const result = await deleteNote(mockNoteId, mockToken);
+
     expect(result).toEqual({
       success: true,
-      data: {},
+      data: "Note removed",
     });
   });
 

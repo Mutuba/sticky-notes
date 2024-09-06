@@ -18,11 +18,17 @@ const DeleteButton = ({ noteId }) => {
         setNotes((prevState) =>
           prevState.filter((note) => note._id !== noteId)
         );
+
+        const toastId = "delete-note-success";
+        toast.dismiss(toastId);
+        toast.error(response.data, {
+          toastId,
+        });
       } else {
         throw new Error(response.error);
       }
     } catch (error) {
-      const toastId = "delete-note-error-toast";
+      const toastId = "delete-note-error";
       toast.dismiss(toastId);
       toast.error(error.message, { toastId });
     }

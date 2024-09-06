@@ -20,8 +20,12 @@ const NotesProvider = ({ children }) => {
   const { userToken } = useContext(AuthContext);
 
   const fetchNotes = useCallback(async () => {
-    if (!userToken) return;
-    const response = await listNotes({}, userToken);
+    if (!userToken) {
+      setLoading(false);
+      return;
+    }
+
+    const response = await listNotes(userToken);
     if (response.success) {
       setNotes(response.data);
     } else {

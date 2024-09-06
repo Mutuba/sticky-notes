@@ -56,7 +56,8 @@ const mockPutNoteResponse = (url) => {
   });
 };
 
-const mockDeleteNoteResponse = () => Promise.resolve({});
+const mockDeleteNoteResponse = () =>
+  Promise.resolve({ message: "Note removed" });
 
 export const mockFetch = () => {
   globalThis.fetch = vi.fn((url, options) => {

@@ -45,6 +45,7 @@ export const updateNote = async (noteId, noteData, token) => {
 };
 
 export const deleteNote = async (noteId, token) => {
+  console.log(`deleting ${noteId}`);
   try {
     const response = await fetch(`${API_BASE_URL}/notes/${noteId}`, {
       method: "DELETE",
@@ -58,7 +59,7 @@ export const deleteNote = async (noteId, token) => {
     }
 
     const data = await response.json();
-    return { success: true, data: data };
+    return { success: true, data: data.message };
   } catch (error) {
     return { success: false, error: error.message };
   }

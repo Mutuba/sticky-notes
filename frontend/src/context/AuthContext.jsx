@@ -22,6 +22,7 @@ const AuthProvider = ({ children }) => {
         return;
       }
 
+      console.log("Found token", token);
       try {
         const response = await fetch(`${API_BASE_URL}/auth/session`, {
           method: "GET",
