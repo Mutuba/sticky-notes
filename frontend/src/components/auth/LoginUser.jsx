@@ -17,8 +17,7 @@ const LoginUser = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-  const { login, user } = useContext(AuthContext);
+  const { login, user, loading } = useContext(AuthContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -30,10 +29,7 @@ const LoginUser = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setError("");
-    setLoading(true);
-    const response = await login(email, password);
-    setLoading(false);
-
+    const response = login(email, password);
     if (response.success) {
       navigate("/");
     } else {

@@ -41,6 +41,16 @@ const mockPostNoteResponse = () =>
     position: { x: 305, y: 110 },
   });
 
+const mockAuthResponse = () =>
+  Promise.resolve({
+    token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
+    user: {
+      id: "66d58e28d2688ab20c43c437",
+      username: "Mutuba",
+      email: "example@example.com",
+    },
+  });
+
 const mockPutNoteResponse = (url) => {
   const _id = parseInt(url.split("/").pop(), 10);
   return Promise.resolve({
@@ -75,6 +85,9 @@ export const mockFetch = () => {
           json: () => mockPutNoteResponse(url),
           ok: true,
         });
+
+      case url.startsWith(`${API_URL}/auth`) && method === "POST":
+        return Promise.resolve({ json: mockAuthResponse, ok: true });
 
       case url.startsWith(`${API_URL}/notes`) && method === "DELETE":
         return Promise.resolve({ json: mockDeleteNoteResponse, ok: true });

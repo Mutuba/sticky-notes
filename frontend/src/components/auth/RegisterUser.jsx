@@ -12,13 +12,12 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 
 const RegisterUser = () => {
-  const { register, user } = useContext(AuthContext);
+  const { register, user, loading } = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -30,9 +29,7 @@ const RegisterUser = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setError("");
-    setLoading(true);
-    const response = await register(username, email, password);
-    setLoading(false);
+    const response = register(username, email, password);
     if (response.success) {
       setSuccess("Registration successful. Please log in.");
       setTimeout(() => navigate("/"), 2000);

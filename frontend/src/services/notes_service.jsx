@@ -45,7 +45,6 @@ export const updateNote = async (noteId, noteData, token) => {
 };
 
 export const deleteNote = async (noteId, token) => {
-  console.log(`deleting ${noteId}`);
   try {
     const response = await fetch(`${API_BASE_URL}/notes/${noteId}`, {
       method: "DELETE",

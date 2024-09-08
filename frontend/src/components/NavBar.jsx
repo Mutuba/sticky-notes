@@ -27,7 +27,7 @@ const Navbar = () => {
   return (
     <>
       {user && (
-        <div>
+        <div data-testid="navbar">
           <Box sx={{ display: "flex", alignItems: "center" }}>
             <IconButton
               edge="start"
