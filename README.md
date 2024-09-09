@@ -44,6 +44,11 @@ cd notes-app
  npm install
 ```
 
+- Start the application
+  `npm run start` to start both the backend and frontend
+
+- Live app at [link](https://favorite-sticky-notes.netlify.app/)
+
 ### Usage
 
 - Register a new user account.
@@ -68,3 +73,5 @@ cd notes-app
 - POST /api/notes: Create a new note.
 - PUT /api/notes/:id: Update an existing note.
 - DELETE `/api/notes
+
+### Screenshots
