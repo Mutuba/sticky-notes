@@ -13,12 +13,21 @@ import { AuthContext } from "../../context/AuthContext";
 
 const RegisterUser = () => {
   const { register, user, loading } = useContext(AuthContext);
-  const [email, setEmail] = useState("");
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [formData, setFormData] = useState({
+    username: "",
+    email: "",
+    password: "",
+  });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const navigate = useNavigate();
+
+  const handleChange = (event) => {
+    setFormData({
+      ...formData,
+      [event.target.name]: event.target.value,
+    });
+  };
 
   useEffect(() => {
     if (user) {
@@ -29,13 +38,17 @@ const RegisterUser = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setError("");
-    const response = register(username, email, password);
-    if (response.success) {
-      setSuccess("Registration successful. Please log in.");
-      setTimeout(() => navigate("/"), 2000);
-    } else {
-      setSuccess("");
-      setError(response.message);
+    try {
+      const response = register(formData);
+      if (response.success) {
+        setSuccess("Registration successful. Please log in.");
+        setTimeout(() => navigate("/"), 2000);
+      } else {
+        setSuccess("");
+        setError(response.message);
+      }
+    } catch (error) {
+      setError("Something went wrong");
     }
   };
 
@@ -50,10 +63,10 @@ const RegisterUser = () => {
             margin="normal"
             required
             fullWidth
-            id="username"
+            name="username"
             type="username"
             label="Username"
-            onChange={(e) => setUsername(e.target.value)}
+            onChange={handleChange}
             autoFocus
           />
 
@@ -61,10 +74,10 @@ const RegisterUser = () => {
             margin="normal"
             required
             fullWidth
-            id="email"
+            name="email"
             type="email"
             label="Email Address"
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={handleChange}
             autoFocus
           />
           <TextField
@@ -74,8 +87,7 @@ const RegisterUser = () => {
             name="password"
             label="Password"
             type="password"
-            onChange={(e) => setPassword(e.target.value)}
-            id="password"
+            onChange={handleChange}
           />
           {error && <Typography color="error">{error}</Typography>}
           {success && <Typography color="primary">{success}</Typography>}
