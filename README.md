@@ -75,3 +75,4 @@ cd notes-app
 - DELETE `/api/notes
 
 ### Screenshots
+<img width="1440" alt="Screenshot 2024-09-09 at 15 25 43" src="https://github.com/user-attachments/assets/3f64e93d-e780-4b9c-b725-8d4f45ff25b8">
