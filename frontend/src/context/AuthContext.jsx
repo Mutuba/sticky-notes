@@ -4,14 +4,7 @@ import Spinner from "../icons/Spinner";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-const AuthContext = createContext({
-  user: {},
-  userToken: "",
-  loading: false,
-  login: () => {},
-  register: () => {},
-  logout: () => {},
-});
+const AuthContext = createContext({});
 
 const AuthProvider = ({ children, initialState }) => {
   const [user, setUser] = useState(initialState?.user ?? null);
@@ -81,14 +74,14 @@ const AuthProvider = ({ children, initialState }) => {
     }
   };
 
-  const login = async (email, password) => {
+  const login = async (loginDatad) => {
     try {
       const response = await fetch(`${API_BASE_URL}/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify(loginDatad),
       });
 
       if (!response.ok) {

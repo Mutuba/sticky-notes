@@ -10,15 +10,21 @@ import {
   Typography,
   TextField,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { AuthContext } from "../../context/AuthContext";
 
 const LoginUser = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const { login, user, loading } = useContext(AuthContext);
   const navigate = useNavigate();
+  const [formData, setFormData] = useState({ email: "", password: "" });
+
+  const handleChange = (event) => {
+    setFormData({
+      ...formData,
+      [event.target.name]: event.target.value,
+    });
+  };
 
   useEffect(() => {
     if (user) {
@@ -29,11 +35,15 @@ const LoginUser = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setError("");
-    const response = login(email, password);
-    if (response.success) {
-      navigate("/");
-    } else {
-      setError(response.message);
+    try {
+      const response = login(formData);
+      if (response.success) {
+        navigate("/");
+      } else {
+        setError(response.message);
+      }
+    } catch (error) {
+      setError("Something went wrong");
     }
   };
 
@@ -48,11 +58,11 @@ const LoginUser = () => {
             margin="normal"
             required
             fullWidth
-            id="email"
+            name="email"
             type="email"
             label="Email Address"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={formData.email}
+            onChange={handleChange}
             autoFocus
           />
           <TextField
@@ -62,8 +72,8 @@ const LoginUser = () => {
             name="password"
             label="Password"
             type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={formData.password}
+            onChange={handleChange}
             id="password"
           />
 
